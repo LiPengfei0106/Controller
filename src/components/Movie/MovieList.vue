@@ -30,7 +30,8 @@ export default {
       return{
         selectTag: 0,
         movieList: [],
-        categoryList: []
+        categoryList: [],
+        movieInfo:{}
       }
   },
   activated() {
@@ -51,11 +52,24 @@ export default {
     async initData(){
       console.log("initData")
       this.getMovieTag()
+      this.checkMovieInfo()
       if(localStorage.getItem('selectTag')){
         this.getMovieListByTag(parseInt(localStorage.getItem('selectTag')))
       }else{
         this.getMovieListByTag(0)
       }
+    },
+    async checkMovieInfo(){
+      common.showLoading(true)
+      let params = {
+        'action': 'checkVersion',
+        'projectID': localStorage.getItem('projectid')
+      }
+      getResources(params).then(res => {
+        console.log("checkMovieInfo")
+        console.log(res)
+        this.movieInfo = res.data;
+      })
     },
     async getMovieTag(){
       common.showLoading(true)
@@ -85,6 +99,10 @@ export default {
       })
     },
     showMovieDetail(movie){
+      console.log("showMovieDetail")
+      movie['singleFee'] = movie.Price * this.movieInfo.feeDiscount
+      movie['packageFee'] = this.movieInfo.packageFee * 100
+      console.log(movie)
       this.$router.push({ name:'MovieDetail', params: movie})
     }
   }

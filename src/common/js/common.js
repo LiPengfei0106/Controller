@@ -31,8 +31,7 @@ var getMoviePayParams = function(movie,action){
       'productType': "Movie",
       'productID':movie.ID,
       'productName':movie.Name['zh-CN'],
-      'fee':movie.Price,
-      'productID':movie.ID,
+      'fee':movie.fee,
       'userid': localStorage.getItem('userid'),
       'projectName': localStorage.getItem('projectid'),
       'orderID':-1
@@ -98,11 +97,14 @@ var addNewMovieOrder = function(movie){
     console.log(error);
     app.showErrorTip("下单失败，请从电视上购买")
   })
-
 }
 
 var showLoading = function(isShow){
   app.showLoading(isShow)
 }
 
-  export default {initApp,setDocumentTitle,sendRemoteControlEvent,addNewMovieOrder,showLoading}
+var showErrorTip = function(content){
+  app.showErrorTip(content)
+}
+
+  export default {initApp,setDocumentTitle,sendRemoteControlEvent,getMoviePayParams,addNewMovieOrder,showLoading,showErrorTip}

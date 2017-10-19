@@ -4,9 +4,9 @@
       <img v-lazy="movie['PicURL_ABS']" lazy="loaded" class="moviePoster"></img>
       <div>{{movie.Name['zh-CN']}}</div>
       <div>{{movie.Introduce['zh-CN']}}</div>
-      <button  @click="playMovie(movie.ID)">播放</button>
-      <button  @click="newMovieOrder(movie)">购买单部</button>
-      <button>购买全部</button>
+      <button @click="playMovie(movie.ID)">播放</button>
+      <button v-show="showPay" @click="newMovieOrder()">购买单部</button>
+      <button v-show="showPay" @click="newAllMovieOrder()">购买全部</button>
   </div>
 </template>
 
@@ -19,12 +19,34 @@ export default {
   name: 'MovieDetail',
   data() {
       return{
-        movie: {}
+        movie: {
+          'ID':0,
+          'Name':{
+            'zh-CN':'',
+            'en-US':''
+          }
+        },
+        allMovie: {
+          'ID':-1,
+          'Name':{
+            'zh-CN':'全部电影',
+            'en-US':'All Movie'
+          }
+        },
+        showPay: false,
+        isActivated: false
       }
   },
   activated() {
+    this.isActivated = true
     this.movie = this.$route.params
+    this.movie['fee'] = this.movie.singleFee
+    this.allMovie['fee'] = this.movie.packageFee
     common.setDocumentTitle(this.movie.Name['zh-CN'])
+    this.checkMovie()
+  },
+  deactivated() {
+    this.isActivated = false
   },
   methods: {
     back() {
@@ -36,8 +58,29 @@ export default {
       }
       common.sendRemoteControlEvent(data,'playMovie')
     },
-    newMovieOrder(movie){
-      common.addNewMovieOrder(movie)
+    newMovieOrder(){
+      common.addNewMovieOrder(this.movie)
+    },
+    newAllMovieOrder(){
+      common.addNewMovieOrder(this.allMovie)
+    },
+    checkMovie(){
+      let params = common.getMoviePayParams(this.movie,"playCheck")
+      remotePay(params).then(res => {
+        console.log(res)
+        if(res.rescode == '200'){
+          if(res.data.canPlay == 0){
+            this.showPay = true
+            if(this.isActivated)
+              setTimeout(() =>{this.checkMovie()}, 3000)
+          }else{
+            this.showPay = false
+          }
+        }
+      }).catch(error => {
+        console.log(error)
+        this.showPay = false
+      })
     }
   }
 }

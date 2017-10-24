@@ -39,7 +39,11 @@ var getMoviePayParams = function(movie,action){
   }
 }
 
+var isSending = false
 var sendRemoteControlEvent = function(data,action){
+  if(isSending)
+    return
+  isSending = true
   let params = {
     'action': action,
     'project': localStorage.getItem('projectid'),
@@ -53,9 +57,11 @@ var sendRemoteControlEvent = function(data,action){
     if(res.rescode != '200'){
       app.showErrorTip("请重新扫描电视上的二维码")
     }
+    isSending = false
   }).catch(error => {
     console.log(error);
     app.showErrorTip("网络错误")
+    isSending = false
   })
 }
 

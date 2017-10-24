@@ -11,6 +11,7 @@
     </div>
     <audio id="audio" src="./static/assets/tink.wav"></audio>
     <TabBar></TabBar>
+    <ControlTip></ControlTip>
   </div>
 </template>
 
@@ -19,11 +20,14 @@
 import common from '@/common/js/common.js'
 import {getResources} from '@/api/service.js'
 import TabBar from '@/components/Common/TabBar.vue'
+import ControlTip from '@/components/Common/ControlTip.vue'
+
 
 export default {
   name: 'LiveList',
   components: {
-    TabBar
+    TabBar,
+    ControlTip
   },
   data () {
       return{

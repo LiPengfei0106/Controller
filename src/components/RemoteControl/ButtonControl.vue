@@ -2,23 +2,20 @@
   <div id="ButtonControl">
     <div class="header">
       <span class="movie">
-        <img src="../../assets/images/看大片.png">
-        <router-link to="/MovieList" class="gotoLink"></router-link>
+        <img src="../../assets/images/返回.png"  @click="back()">
       </span>
       <span class="scan">
-        <div class="gotoLink"  @click="scan()"></div>
-        <img src="../../assets/images/扫码.png">
+        <img src="../../assets/images/扫一扫.png" @click="scan()">
       </span>
       <span class="tv">
-        <router-link to="/LiveList" class="gotoLink"></router-link>
-        <img src="../../assets/images/看直播.png">
+        <img src="../../assets/images/直播.png"  @click="btnPressedUp(keyCode.TV)">
       </span>
     </div>
     <div class="volControl">
       <div class="volBtn_1" v-on:touchstart="btnTaped(keyCode.VolDown)" v-on:touchend="btnPressedUp(keyCode.VolDown)"></div>
       <div class="volBtn_3" v-on:touchstart="btnTaped(keyCode.Mute)" v-on:touchend="btnPressedUp(keyCode.Mute)"></div>
       <div class="volBtn_2" v-on:touchstart="btnTaped(keyCode.VolUp)" v-on:touchend="btnPressedUp(keyCode.VolUp)"></div>
-      <img src="../../assets/images/音量.png">
+      <img src="../../assets/images/音量.png" v-show="key != keyCode.VolUp && key != keyCode.Mute && key != keyCode.VolDown">
       <img src="../../assets/images/加.png" v-show="key == keyCode.VolUp">
       <img src="../../assets/images/vol_pressed.png" v-show="key == keyCode.Mute">
       <img src="../../assets/images/减.png" v-show="key == keyCode.VolDown">
@@ -29,7 +26,7 @@
       <div class="okBtn" v-on:touchstart="btnTaped(keyCode.Ok)" v-on:touchend="btnPressedUp(keyCode.Ok)"></div>
       <div class="rightBtn" v-on:touchstart="btnTaped(keyCode.Right)" v-on:touchend="btnPressedUp(keyCode.Right)"></div>
       <div class="downBtn" v-on:touchstart="btnTaped(keyCode.Down)" v-on:touchend="btnPressedUp(keyCode.Down)"></div>
-      <img src="../../assets/images/ctrl_1.png">
+      <img src="../../assets/images/ctrl_1.png" v-show="key != keyCode.Up && key != keyCode.Left && key != keyCode.Ok && key != keyCode.Right && key != keyCode.Down">
       <img src="../../assets/images/up_1.png" v-show="key == keyCode.Up">
       <img src="../../assets/images/left_1.png" v-show="key == keyCode.Left">
       <img src="../../assets/images/OK_1.png" v-show="key == keyCode.Ok">
@@ -37,15 +34,15 @@
       <img src="../../assets/images/down_1.png" v-show="key == keyCode.Down">
     </div>
     <div class="footer">
-      <span class="return">
-        <div class="returnBtn" v-on:touchstart="btnTaped(keyCode.Back)" v-on:touchend="btnPressedUp(keyCode.Back)"></div>
-        <img src="../../assets/images/back.png">
-        <img src="../../assets/images/back_pressed.png" v-show="key == keyCode.Back">
-      </span>
       <span class="menu">
         <div class="menuBtn" v-on:touchstart="btnTaped(keyCode.Menu)" v-on:touchend="btnPressedUp(keyCode.Menu)"></div>
-        <img src="../../assets/images/menu.png">
+        <img src="../../assets/images/menu.png"  v-show="key != keyCode.Menu">
         <img src="../../assets/images/menu_pressed.png" v-show="key == keyCode.Menu">
+      </span>
+      <span class="return">
+        <div class="returnBtn" v-on:touchstart="btnTaped(keyCode.Back)" v-on:touchend="btnPressedUp(keyCode.Back)"></div>
+        <img src="../../assets/images/back.png" v-show="key != keyCode.Back">
+        <img src="../../assets/images/back_pressed.png" v-show="key == keyCode.Back">
       </span>
     </div>
     <audio id="audio" src="./static/assets/tink.wav"></audio>
@@ -75,6 +72,9 @@ export default {
     document.querySelector('body').ontouchmove = null;
   },
   methods: {
+    back() {
+      window.history.go(-1)
+    },
     scan: function() {
       console.log('scan pressed');
       wx.scanQRCode({
@@ -237,11 +237,6 @@ export default {
     left: 50%;
     top: 54%;
   }
-  // .menu img, .return img{
-  //   width: 26%;
-  //   position: absolute;
-  //   bottom: 5%;
-  // }
   .menu img, .return img{
     width: 36%;
     position: absolute;
@@ -255,23 +250,7 @@ export default {
     height: 12%;
     z-index: 9;
   }
-  // .returnBtn{
-  //   width: 26%;
-  //   position: absolute;
-  //   bottom: 5%;
-  //   left: 7%;
-  //   height: 6%;
-  //   z-index: 9;
-  // }
-  // .menuBtn{
-  //   width: 26%;
-  //   position: absolute;
-  //   bottom: 5%;
-  //   right: 7%;
-  //   height: 6%;
-  //   z-index: 9;
-  // }
-  .returnBtn{
+  .menuBtn{
     width: 36%;
     position: absolute;
     bottom: 5%;
@@ -279,7 +258,7 @@ export default {
     height: 8%;
     z-index: 9;
   }
-  .menuBtn{
+  .returnBtn{
     width: 36%;
     position: absolute;
     bottom: 5%;
@@ -287,17 +266,11 @@ export default {
     height: 8%;
     z-index: 9;
   }
-  // .return img{
-  //   left: 7%;
-  // }
-  // .menu img{
-  //   right:7%;
-  // }
   .return img{
-    left: 9%;
+    right: 9%;
   }
   .menu img{
-    right:9%;
+    left:9%;
   }
   .recording{
     width: 80%;

@@ -36,7 +36,8 @@ export default {
     return {
       errorTipInfo:{
         isShow:false,
-        errorContent:'Error'
+        errorContent:'Error',
+        showTime:3
       },
       isShowLoading:false
     }
@@ -59,10 +60,22 @@ export default {
       }
     },
     showErrorTip(content){
-      this.errorTipInfo.isShow = true;
+      this.errorTipInfo.showTime = 3
       if(content)
         this.errorTipInfo.errorContent = content
-      setTimeout(() =>{this.errorTipInfo.isShow = false}, 3000)
+      if(this.errorTipInfo.isShow != true)
+        this.checkErrorTime()
+      this.errorTipInfo.isShow = true
+    },
+    checkErrorTime(){
+      setTimeout(() =>{
+        this.errorTipInfo.showTime--
+        if(this.errorTipInfo.showTime<0){
+          this.errorTipInfo.isShow = false
+        }else{
+          this.checkErrorTime()
+        }
+      }, 1000)
     },
     showLoading(isShow){
       this.isShowLoading = isShow

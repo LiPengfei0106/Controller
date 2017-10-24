@@ -9,6 +9,7 @@ const keyCodes = {
   VolDown: 25,
   Home: 135,
   Menu: 82,
-  Mute: 164
+  Mute: 164,
+  TV: 170
 }
 export {keyCodes}

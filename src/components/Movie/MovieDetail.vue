@@ -13,7 +13,7 @@
           <div>导演：{{movie.Director['zh-CN']}}</div>
           <div>评分：{{movie.Score}}</div>
         </div>
-        <div class="payBar">
+        <div v-show="showPay" class="payBar">
           <button @click="newMovieOrder()">单部 (￥{{movie.singleFee/100}})</button>
           <button @click="newAllMovieOrder()">全部 (￥{{movie.packageFee/100}})</button>
         </div>

@@ -93,7 +93,7 @@ export default {
     bindTVDeviceID(clear_session) {
       let bindParams = {
         'clear_session': sessionStorage.getItem('clear_session'),
-        'deviceid': sessionStorage.getItem('deviceid'),
+        'deviceid': localStorage.getItem('deviceid'),
       }
       bindTVDevice(bindParams).then(res => {
         if(res.rescode == '200') {

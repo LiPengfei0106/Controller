@@ -9,7 +9,7 @@
 </template>
 
 <script>
-var needLogin = true
+// var needLogin = false
 var urlParams
 
 (window.onpopstate = function () {
@@ -26,6 +26,8 @@ var urlParams
 
 import common from './common/js/common.js'
 import ErrorTip from '@/components/Common/ErrorTip.vue'
+import {configs} from '@/data/staticData.js'
+
 
 export default {
   name: 'app',
@@ -53,10 +55,21 @@ export default {
       console.log('init')
       console.log(urlParams)
       localStorage.setItem('appid', urlParams.appid)
-      if(needLogin){
+      if(configs.needLogin){
         this.$router.push({name:'Login',params: {appid:urlParams.appid,code:urlParams.code,state:urlParams.state}})
       }else{
-        this.$router.push({name:'MovieList'})
+        if(!urlParams.deviceid)
+          urlParams.deviceid = 'demo$888$123456789'
+        if(!urlParams.projectid)
+          urlParams.projectid = 'demo'
+        localStorage.setItem('deviceid', urlParams.deviceid);
+        localStorage.setItem('projectid', urlParams.projectid);
+        if(configs.hasMovie)
+          this.$router.push({name:'MovieList'})
+        else if(configs.hasLive)
+          this.$router.push({name:'LiveList'})
+        else
+          this.$router.push({name:'ButtonControl'})
       }
     },
     showErrorTip(content){

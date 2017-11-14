@@ -12,4 +12,11 @@ const keyCodes = {
   Mute: 164,
   TV: 170
 }
-export {keyCodes}
+
+const configs = {
+  needLogin : false,
+  hasMovie : true,
+  hasLive : true,
+  canPay: true
+}
+export {keyCodes,configs}

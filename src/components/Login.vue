@@ -9,7 +9,8 @@
 <<script>
 
 import common from '@/common/js/common.js'
-import {getWxParams, checkWxSubs,getRemoteSubscribeURL, bindTVDevice, getTVDeviceId, getWXSign} from '@/api/service.js'
+import {getWxParams, checkWxSubs,getRemoteSubscribeURL, bindTVDevice, getTVDeviceId, getWXSign,getResources} from '@/api/service.js'
+import {configs} from '@/data/staticData.js'
 
 export default {
   name: 'Login',
@@ -113,7 +114,25 @@ export default {
         let isSubscribe = res['subscribe']
         localStorage.setItem('isSubscribe', isSubscribe);
         if(isSubscribe == 1) {
-          this.$router.push({name:'MovieList'})
+          let params = {
+            'action': 'checkInfo',
+            'projectID': localStorage.getItem('projectid')
+          }
+          getResources(params).then(res => {
+            console.log("checkInfo")
+            console.log(res)
+            configs.hasMovie = res.data.hasMovie == 1;
+            configs.hasLive = res.data.hasLive == 1;
+            configs.canPay = res.data.canPay == 1;
+            if(configs.hasMovie)
+              this.$router.push({name:'MovieList'})
+            else if(configs.hasLive)
+              this.$router.push({name:'LiveList'})
+            else{
+              common.showLoading(false)
+              this.$router.push({name:'ButtonControl'})
+            }
+          })
         }else{
           this.showRedirectUrl()
         }

@@ -33,3 +33,11 @@ a{
   background: rgb(21,25,15);
   z-index: -1
 }
+.contentBottom{
+  font-size: 0.5rem;
+  color: #666666;
+  height: 1.6rem;
+  width: 100%;
+  text-align: center;
+  line-height: 1.6rem
+}

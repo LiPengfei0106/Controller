@@ -10,8 +10,10 @@
         <img v-lazy="movie['PicURL_ABS']" lazy="loaded" class="moviePoster" @click="showMovieDetail(movie)"></img>
         <span class="movieName">{{movie.Name['zh-CN']}}</span>
       </div>
+      <div class="contentBottom">已经到底啦</div>
     </div>
-    <TabBar></TabBar>
+    
+    <TabBar v-show="hasLive"></TabBar>
     <ControlTip></ControlTip>
   </div>
 </template>
@@ -22,6 +24,7 @@ import common from '@/common/js/common.js'
 import {getResources} from '@/api/service.js'
 import TabBar from '@/components/Common/TabBar.vue'
 import ControlTip from '@/components/Common/ControlTip.vue'
+import {configs} from '@/data/staticData.js'
 
 export default {
   name: 'MovieList',
@@ -34,7 +37,8 @@ export default {
         selectTag: 0,
         movieList: [],
         categoryList: [],
-        movieInfo:{}
+        movieInfo:{},
+        hasLive:configs.hasLive
       }
   },
   activated() {
@@ -161,7 +165,6 @@ export default {
     overflow: auto;
     position: absolute;
     padding-top:  90/@baseS*1rem;
-    padding-bottom:  120/@baseS*1rem;
   }
   .movieItem{
     display: inline-block;

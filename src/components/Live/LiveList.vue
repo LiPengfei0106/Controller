@@ -8,9 +8,10 @@
           <span class="channelName">{{live.ChannelName['zh-CN']}}</span>
         </div>
       </div>
+      <div class="contentBottom">已经到底啦</div>
     </div>
     <audio id="audio" src="./static/assets/tink.wav"></audio>
-    <TabBar></TabBar>
+    <TabBar v-show="hasMovie"></TabBar>
     <ControlTip></ControlTip>
   </div>
 </template>
@@ -21,7 +22,7 @@ import common from '@/common/js/common.js'
 import {getResources} from '@/api/service.js'
 import TabBar from '@/components/Common/TabBar.vue'
 import ControlTip from '@/components/Common/ControlTip.vue'
-
+import {configs} from '@/data/staticData.js'
 
 export default {
   name: 'LiveList',
@@ -31,7 +32,8 @@ export default {
   },
   data () {
       return{
-        liveList: []
+        liveList: [],
+        hasMovie: configs.hasMovie
       }
   },
   activated() {
@@ -85,7 +87,6 @@ export default {
     width: 100%;
     z-index: 1;
     user-select: none;
-    padding-bottom: 120/@baseS*1rem;
   }
   .channelBox{
     border-radius:9px;

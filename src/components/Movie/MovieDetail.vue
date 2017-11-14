@@ -42,7 +42,7 @@
 import common from '@/common/js/common.js'
 import {remotePay} from '@/api/service.js'
 import ControlTip from '@/components/Common/ControlTip.vue'
-import {keyCodes} from '@/data/staticData.js'
+import {keyCodes,configs} from '@/data/staticData.js'
 
 export default {
   name: 'MovieDetail',
@@ -108,6 +108,10 @@ export default {
       common.addNewMovieOrder(this.allMovie)
     },
     checkMovie(){
+      if(!configs.canPay){
+        this.showPay = false
+        return
+      }
       let params = common.getMoviePayParams(this.movie,"playCheck")
       remotePay(params).then(res => {
         console.log(res)

@@ -6,6 +6,9 @@
   </div>
 </template>
 <script>
+
+import {configs} from '@/data/staticData.js'
+
 export default {
  name: 'ControlTip',
  data: function() {
@@ -28,7 +31,7 @@ export default {
  methods: {
    gotoLink: function(){
      console.log('clicked');
-     this.$router.push('/ButtonControl')
+     this.$router.push({name:configs.controlType})
    },
    checkBorder: function(){
      let imgWidth = document.querySelector('.remoteImg').width;

@@ -124,13 +124,14 @@ export default {
             configs.hasMovie = res.data.hasMovie == 1;
             configs.hasLive = res.data.hasLive == 1;
             configs.canPay = res.data.canPay == 1;
+            configs.controlType = res.data.controlType
             if(configs.hasMovie)
               this.$router.push({name:'MovieList'})
             else if(configs.hasLive)
               this.$router.push({name:'LiveList'})
             else{
               common.showLoading(false)
-              this.$router.push({name:'ButtonControl'})
+              this.$router.push({name:configs.controlType})
             }
           })
         }else{

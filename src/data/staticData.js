@@ -14,9 +14,10 @@ const keyCodes = {
 }
 
 const configs = {
-  needLogin : false,
+  needLogin : true,
   hasMovie : true,
   hasLive : true,
-  canPay: true
+  canPay: true,
+  controlType: 'ButtonControl'
 }
 export {keyCodes,configs}

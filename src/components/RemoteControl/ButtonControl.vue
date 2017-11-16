@@ -49,7 +49,7 @@
   </div>
 </template>
 
-<<script>
+<script>
 
 import common from '@/common/js/common.js'
 import {keyCodes} from '../../data/staticData.js'

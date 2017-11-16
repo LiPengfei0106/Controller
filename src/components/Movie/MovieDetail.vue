@@ -28,12 +28,13 @@
         <button @click="newAllMovieOrder()">购买全部</button>
       </div> -->
     </div>
-    <div class="ControlBar">
+    <!-- <div class="ControlBar">
       <img src="../../assets/images/快退.png" @click="keyEvent(keyCode.Left)"></img>
       <img src="../../assets/images/视频播放.png" @click="playMovie()"></img>
       <img src="../../assets/images/快进.png" @click="keyEvent(keyCode.Right)"></img>
-    </div>
+    </div> -->
     <ControlTip></ControlTip>
+    <PlayBar></PlayBar>
   </div>
 </template>
 
@@ -42,12 +43,14 @@
 import common from '@/common/js/common.js'
 import {remotePay} from '@/api/service.js'
 import ControlTip from '@/components/Common/ControlTip.vue'
+import PlayBar from '@/components/Common/PlayBar.vue'
 import {keyCodes,configs} from '@/data/staticData.js'
 
 export default {
   name: 'MovieDetail',
   components: {
-    ControlTip
+    ControlTip,
+    PlayBar
   },
   data() {
       return{

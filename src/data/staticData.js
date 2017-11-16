@@ -14,7 +14,7 @@ const keyCodes = {
 }
 
 const configs = {
-  needLogin : true,
+  needLogin : false,
   hasMovie : true,
   hasLive : true,
   canPay: true,

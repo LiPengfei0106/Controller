@@ -6,16 +6,20 @@
     </div>
     <div class="Content">
       <div>
-        <img v-lazy="movie['PicURL_ABS']" lazy="loaded" class="moviePoster"/>
+        <img v-lazy="movie['PicURL_ABS']" lazy="loaded" class="moviePoster" @click="playMovie()"/>
         <div class="movieInfo">
           <div>年份：{{movie.Year}}</div>
           <div>主演：{{movie.Actor['zh-CN']}}</div>
           <div>导演：{{movie.Director['zh-CN']}}</div>
           <div>评分：{{movie.Score}}</div>
         </div>
-        <div v-show="showPay" class="payBar">
+        <div class="payBar" v-show="showPay && !hasDiscount">
           <button @click="newMovieOrder()">单部 (￥{{movie.singleFee/100}})</button>
           <button @click="newAllMovieOrder()">全部 (￥{{movie.packageFee/100}})</button>
+        </div>
+        <div class="payBar" v-show="showPay && hasDiscount">
+          <button @click="newMovieOrder()">单部 (<span class="oldPrice">￥{{movie.singleFee/100}}</span><span class="discount">￥{{movie.singleFee*discount/10000}}</span>)</button>
+          <button @click="newAllMovieOrder()">全部 (<span class="oldPrice">￥{{movie.packageFee/100}}</span><span class="discount">￥{{movie.packageFee*discount/10000}}</span>)</button>
         </div>
         <div class="movieIntroduce">
           {{movie.Introduce['zh-CN']}}
@@ -28,13 +32,14 @@
         <button @click="newAllMovieOrder()">购买全部</button>
       </div> -->
     </div>
-    <!-- <div class="ControlBar">
+    <div class="ControlBar">
       <img src="../../assets/images/快退.png" @click="keyEvent(keyCode.Left)"></img>
       <img src="../../assets/images/视频播放.png" @click="playMovie()"></img>
       <img src="../../assets/images/快进.png" @click="keyEvent(keyCode.Right)"></img>
-    </div> -->
+    </div>
+    <img class="tryPlay" src="../../assets/images/点击.png" @click="playMovie()" v-show="tryPlay && showPay"></img>
     <ControlTip></ControlTip>
-    <PlayBar></PlayBar>
+    <!-- <PlayBar></PlayBar> -->
   </div>
 </template>
 
@@ -43,14 +48,14 @@
 import common from '@/common/js/common.js'
 import {remotePay} from '@/api/service.js'
 import ControlTip from '@/components/Common/ControlTip.vue'
-import PlayBar from '@/components/Common/PlayBar.vue'
+// import PlayBar from '@/components/Common/PlayBar.vue'
 import {keyCodes,configs} from '@/data/staticData.js'
 
 export default {
   name: 'MovieDetail',
   components: {
-    ControlTip,
-    PlayBar
+    ControlTip
+    // PlayBar
   },
   data() {
       return{
@@ -59,7 +64,21 @@ export default {
           'Name':{
             'zh-CN':'电影名称',
             'en-US':'Mvoie Name'
-          }
+          },
+          'Actor':{
+            'zh-CN':'Actor',
+            'en-US':'Actor Name'
+          },
+          'Director':{
+            'zh-CN':'Director',
+            'en-US':'Director Name'
+          },
+          'Introduce':{
+            'zh-CN':'Introduce',
+            'en-US':'Introduce Name'
+          },
+          'Year':2017,
+          'Score':9
         },
         allMovie: {
           'ID':-1,
@@ -71,6 +90,9 @@ export default {
         showPay: false,
         isActivated: false,
         keyCode:keyCodes,
+        hasDiscount:configs.movieDiscount > 0 && configs.movieDiscount<100,
+        discount:configs.movieDiscount,
+        tryPlay:true
       }
   },
   activated() {
@@ -79,6 +101,10 @@ export default {
       this.movie = this.$route.params
       this.movie['fee'] = this.movie.singleFee
       this.allMovie['fee'] = this.movie.packageFee
+      if(this.hasDiscount){
+        this.movie['fee'] = this.movie.singleFee*this.discount/100
+      this.allMovie['fee'] = this.movie.packageFee*this.discount/100
+      }
     }
     common.setDocumentTitle('电影详情')
     document.getElementById('controltip').style.left = "0px";
@@ -99,6 +125,7 @@ export default {
       common.sendRemoteControlEvent(data,"keyEvent")
     },
     playMovie() {
+      this.tryPlay = false;
       let data = {
         'movieID': this.movie.ID
       }
@@ -198,6 +225,13 @@ export default {
     text-align: center;
     background-color: rgb(21,25,15); 
   }
+  .oldPrice{
+    text-decoration: line-through;
+    color: #666666;
+  }
+  .discount {
+    color: #ff6666;
+  }
   .payBar button{
     width: 280/@baseS*1rem;
     height: 80/@baseS*1rem;
@@ -217,6 +251,12 @@ export default {
     padding: 40/@baseS*1rem;
     padding-bottom: 80/@baseS*1rem;
     padding-top: 20/@baseS*1rem;
+  }
+  .tryPlay{
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
   }
   .ControlBar{
     width: 100%;

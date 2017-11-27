@@ -124,7 +124,8 @@ export default {
             configs.hasMovie = res.data.hasMovie == 1;
             configs.hasLive = res.data.hasLive == 1;
             configs.canPay = res.data.canPay == 1;
-            configs.controlType = res.data.controlType
+            configs.controlType = res.data.controlType;
+            configs.movieDiscount = res.data.movieDiscount;
             if(configs.hasMovie)
               this.$router.push({name:'MovieList'})
             else if(configs.hasLive)

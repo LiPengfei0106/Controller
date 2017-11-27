@@ -9,7 +9,8 @@
       </span>
       <span class="tv">
         <a href="http://mts.xiezhuwang.com/HotelMaster/FirstLook?Path=home&AppID=wxc4118297da3a9a0a">
-        <img src="../../assets/images/客控.png"  @click="btnPressedUp(keyCode.TV)">
+        <!-- <a href="http://mts.xiezhuwang.com/HotelMaster/FirstLook?Path=home&AppID=wxb8aac5c60f0aab5b"> -->
+          <img src="../../assets/images/客控.png">
         </a>
       </span>
     </div>

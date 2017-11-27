@@ -18,6 +18,7 @@ const configs = {
   hasMovie : true,
   hasLive : true,
   canPay: false,
-  controlType: 'ButtonControl'
+  controlType: 'ButtonControl',
+  movieDiscount:50
 }
 export {keyCodes,configs}

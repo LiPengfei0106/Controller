@@ -8,12 +8,19 @@ import ButtonAndRoomControl from '@/components/RemoteControl/ButtonAndRoomContro
 import NoMenuButtonControl from '@/components/RemoteControl/NoMenuButtonControl'
 import NoMenuAndRoomControl from '@/components/RemoteControl/NoMenuAndRoomControl'
 import Login from '@/components/Login'
+import Main from '@/components/Main/Main'
+import MainLive from '@/components/Main/MainLive'
+import MainMovie from '@/components/Main/MainMovie'
+import MainTitle from '@/components/Main/MainTitle'
 // import Index from '@/components/Index'
 
 
 Vue.use(Router)
 var routes = [
-  // {path: "/", component: Index, meta: { title: '登录中'}},
+  {name:"MainTitle",path: "/MainTitle", component: MainTitle, meta: { title: '手机遥控器'}},
+  {name:"MainMovie",path: "/MainMovie", component: MainMovie, meta: { title: '手机遥控器'}},
+  {name:"MainLive",path: "/MainLive", component: MainLive, meta: { title: '手机遥控器'}},
+  {name:"Main",path: "/Main", component: Main, meta: { title: '手机遥控器'}},
   {name:"Login",path: "/Login", component: Login, meta: { title: '登录中'}},
   {name:"ButtonControl",path: "/ButtonControl", component: ButtonControl, meta: { title: '遥控器'}},
   {name:"ButtonAndRoomControl",path: "/ButtonAndRoomControl", component: ButtonAndRoomControl, meta: { title: '遥控器'}},

@@ -10,26 +10,17 @@
       </div>
       <div class="contentBottom">已经到底啦</div>
     </div>
-    <audio id="audio" src="./static/assets/tink.wav"></audio>
-    <TabBar v-show="hasMovie"></TabBar>
-    <ControlTip></ControlTip>
   </div>
 </template>
 
-<<script>
+<script>
 
 import common from '@/common/js/common.js'
 import {getResources} from '@/api/service.js'
-import TabBar from '@/components/Common/TabBar.vue'
-import ControlTip from '@/components/Common/ControlTip.vue'
-import {configs} from '@/data/staticData.js'
+import {configs,data} from '@/data/staticData.js'
 
 export default {
   name: 'LiveList',
-  components: {
-    TabBar,
-    ControlTip
-  },
   data () {
       return{
         liveList: [],
@@ -38,9 +29,9 @@ export default {
   },
   activated() {
     common.setDocumentTitle('看直播');
-    document.querySelector('body').scrollTop = localStorage.getItem('livePosition');
-    document.getElementById('controltip').style.left = "0px";
-    document.getElementById('controltip').style.top = "0px";
+    // document.querySelector('body').scrollTop = localStorage.getItem('livePosition');
+    // document.getElementById('controltip').style.left = "0px";
+    // document.getElementById('controltip').style.top = "0px";
   },
   mounted() {
     this.getLiveLists();
@@ -61,6 +52,7 @@ export default {
       })
     },
     playLive (index) {
+      common.playAudio();
       let data = {'channelIndex':index}
       common.sendRemoteControlEvent(data,"playLive")
     }
@@ -87,6 +79,7 @@ export default {
     width: 100%;
     z-index: 1;
     user-select: none;
+    padding-top:  90/@baseS*1rem;
   }
   .channelBox{
     border-radius:9px;

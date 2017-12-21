@@ -7,7 +7,7 @@ Vue.prototype.http = axios
 export default axios
 
 export const getResources = (params) => {
-  return axios.post('/backend_mgt/v1/cacheproxymovie', params).then(res => res.data)
+  return axios.post('/rc/controllerdata', params).then(res => res.data)
 }
 
 export const sendControlEvent= (params) => {
@@ -41,5 +41,9 @@ export const getRemoteSubscribeURL = (params) => {
 
 export const remotePay = (params) => {
   return axios.post('/rc/remotepay', params).then(res => res.data)
+}
+
+export const uploadControllerAction = (params) => {
+  return axios.post('/rc/controlleraction', params).then(res => res.data)
 }
 

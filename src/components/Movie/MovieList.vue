@@ -70,7 +70,7 @@ export default {
       common.showLoading(true)
       let params = {
         'action': 'checkVersion',
-        'projectID': localStorage.getItem('projectid')
+        'projectID': localStorage.getItem('projectName')
       }
       getResources(params).then(res => {
         console.log("checkMovieInfo")
@@ -82,7 +82,7 @@ export default {
       common.showLoading(true)
       let params = {
         'action': 'getMovieTag',
-        'projectID': localStorage.getItem('projectid')
+        'projectID': localStorage.getItem('projectName')
       }
       getResources(params).then(res => {
         this.categoryList = res.data;
@@ -95,7 +95,7 @@ export default {
       localStorage.setItem('selectTag',ID);
       let params = {
         'action': 'getMovieListByTag',
-        'projectID': localStorage.getItem('projectid'),
+        'projectID': localStorage.getItem('projectName'),
         'data': {
           'tagid': ID
         }

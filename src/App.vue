@@ -47,6 +47,7 @@ export default {
         showTime:3
       },
       isShowLoading:false,
+      mac:'00:00:00:00',
       deviceID:'deviceid',
       projectName:'demo',
       deviceAlias:'devicealias',
@@ -77,30 +78,42 @@ export default {
         console.log('不用登录')
         if(configs.remoteType == 'WeiXin_proxy'){
           this.projectName = 'demo';
-          this.regID = 'registerid';
+          this.mac = 'mac';
           this.deviceAlias = 'devicealias';
-          this.deviceIP = '192.168.17.216:40106';
-          common.initWildDog(this.regID)
+          this.deviceIP = '192.168.17.204:40106';
           localStorage.setItem('projectName', this.projectName);
           localStorage.setItem('deviceAlias', this.deviceAlias);
-          localStorage.setItem('regID', this.regID);
+          localStorage.setItem('mac', this.mac);
           localStorage.setItem('deviceIP', this.deviceIP);
           this.$router.push({name:'Main'});
           return;
+        }else if(configs.remoteType == 'WildDog'){
+          this.projectName = 'demo';
+          this.mac = 'mac';
+          this.deviceAlias = 'devicealias';
+          this.deviceIP = '192.168.17.204:40106';
+          common.initWildDog('test')
+          localStorage.setItem('projectName', this.projectName);
+          localStorage.setItem('deviceAlias', this.deviceAlias);
+          localStorage.setItem('mac', this.mac);
+          localStorage.setItem('deviceIP', this.deviceIP);
+          this.$router.push({name:'Main'});
+          return;
+        // }else if(configs.remoteType == 'WeiXin'){
+        }else{
+          if(!urlParams.deviceid)
+            urlParams.deviceid = 'demo$888$123456789'
+          if(!urlParams.projectid)
+            urlParams.projectid = 'demo'
+          localStorage.setItem('deviceid', urlParams.deviceid);
+          localStorage.setItem('projectid', urlParams.projectid);
+          if(configs.hasMovie)
+            this.$router.push({name:'MovieList'})
+          else if(configs.hasLive)
+            this.$router.push({name:'LiveList'})
+          else
+            this.$router.push({name:'ButtonControl'})
         }
-        
-        if(!urlParams.deviceid)
-          urlParams.deviceid = 'demo$888$123456789'
-        if(!urlParams.projectid)
-          urlParams.projectid = 'demo'
-        localStorage.setItem('deviceid', urlParams.deviceid);
-        localStorage.setItem('projectid', urlParams.projectid);
-        if(configs.hasMovie)
-          this.$router.push({name:'MovieList'})
-        else if(configs.hasLive)
-          this.$router.push({name:'LiveList'})
-        else
-          this.$router.push({name:'ButtonControl'})
       }
     },
     showErrorTip(content){
@@ -130,26 +143,30 @@ export default {
       console.log('code:'+code);
       console.log('state:'+state);
       localStorage.setItem('appid', appid);
-      if(state == 'getdeviceid'){
+      if(state == 'gettvdeviceid'){
         console.log('读取缓存')
         this.projectName = localStorage.getItem('projectName');
-        this.regID = localStorage.getItem('regID');
+        this.mac = localStorage.getItem('mac');
         this.deviceAlias = localStorage.getItem('deviceAlias');
         this.deviceIP = localStorage.getItem('deviceIP');
-        if(!projectName){
+        if(!this.projectName){
           console.log('没有缓存')
           this.projectName = 'demo'
+          localStorage.setItem('projectName', this.projectName);
+          localStorage.setItem('mac', 'None');
+          localStorage.setItem('deviceAlias', 'None');
+          localStorage.setItem('deviceIP', 'None');
         }
       }else if((state.split('$')).length > 2){
         console.log('老的极光的参数')
         this.deviceAlias = state.split(';')[0]
         this.projectName = this.deviceAlias.split('$')[0]
-        this.regID = 'unknow';
+        this.mac = 'unknow';
         this.deviceIP = '0.0.0.0';
 
         localStorage.setItem('projectName', this.projectName);
         localStorage.setItem('deviceAlias', this.deviceAlias);
-        localStorage.setItem('regID', this.regID);
+        localStorage.setItem('mac', this.mac);
         localStorage.setItem('deviceIP', this.deviceIP);
       }else{
         let decodedData = window.atob(state).split(';');
@@ -158,12 +175,12 @@ export default {
           console.log(decodedData);
           this.deviceAlias = state
           this.projectName = decodedData[0];
-          this.regID = decodedData[1];
+          this.mac = decodedData[1];
           this.deviceIP = decodedData[2];
           this.time = decodedData[3];
 
           localStorage.setItem('projectName', this.projectName);
-          localStorage.setItem('regID', this.regID);
+          localStorage.setItem('mac', this.mac);
           localStorage.setItem('deviceAlias', this.deviceAlias);
           localStorage.setItem('deviceIP', this.deviceIP);
         }else{
@@ -187,9 +204,9 @@ export default {
         configs.controlType = res.data.controlType;
         configs.movieDiscount = res.data.movieDiscount;
         if(configs.remoteType == 'WeiXin_proxy'){
-          common.initWildDog(this.regID)
-        }else{
 
+        }else if(configs.remoteType == 'WildDog'){
+          common.initWildDog(this.mac)
         }
         if(sessionStorage.getItem('clear_session')){
           this.checkSubscribe()
@@ -233,11 +250,8 @@ export default {
         localStorage.setItem('isSubscribe', isSubscribe);
         if(isSubscribe == 1) {
           // TODO
-          if(configs.remoteType == 'WeiXin_proxy'){
-            console.log("新的遥控器界面");
-            this.$router.push({name:'Main'})
-          }else{
-            console.log("默认旧的遥控器界面");
+          if(configs.remoteType == 'WeiXin'){
+            console.log("旧的遥控器界面");
             if(configs.hasMovie)
               this.$router.push({name:'MovieList'})
             else if(configs.hasLive)
@@ -246,6 +260,9 @@ export default {
               common.showLoading(false)
               this.$router.push({name:configs.controlType})
             }
+          }else{
+            console.log("默认新的遥控器界面");
+            this.$router.push({name:'Main'})
           }
         }else{
           common.showRedirectUrl(this.projectName)

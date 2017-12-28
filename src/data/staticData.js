@@ -19,6 +19,7 @@ const configs = {
   hasLive : true,
   canPay: false,
   controlType: 'ButtonControl',
+  // remoteType: 'WildDog',
   remoteType: 'WeiXin_proxy',
   movieDiscount:50
 }

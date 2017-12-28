@@ -28,7 +28,7 @@ export default {
       }
   },
   activated() {
-    common.setDocumentTitle('看直播');
+    // common.setDocumentTitle('看直播');
     // document.querySelector('body').scrollTop = localStorage.getItem('livePosition');
     // document.getElementById('controltip').style.left = "0px";
     // document.getElementById('controltip').style.top = "0px";

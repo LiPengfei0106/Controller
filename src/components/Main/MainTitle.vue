@@ -4,8 +4,10 @@
             <div class="TVButton"  v-show="hasLive">
                 <img src="../../assets/images/tv_pressed.png" @click="showLive()">
             </div>
-            <div :class="{'subCate': true, 'selected': selectTag == category.ID}" v-for="category in categoryList" :key="category.id" @click="getMovieListByTag(category.ID)">
-                {{category.CategoryName['zh-CN']}}
+            <div class="movieTagList">
+              <div :class="{'subCate': true, 'selected': selectTag == category.ID}" v-for="category in categoryList" :key="category.id" @click="getMovieListByTag(category.ID)">
+                  {{category.CategoryName['zh-CN']}}
+              </div>
             </div>
         </div>
         <div class="liveTag" v-show="titleBarType=='showLive'">
@@ -100,11 +102,17 @@ export default {
 @baseS: 75;
 .TVButton{
     display: inline-block;
-    margin-left: 10/@baseS*1rem;
+    width: 150/@baseS*1rem;
+    height: 100/@baseS*1rem;
+    background-color: rgb(20,20,20);
+    position: fixed;
+    z-index: 11;
   }
 .TVButton img{
+  align-self: center;
+    padding-left: 50/@baseS*1rem;
     width: 50/@baseS*1rem;
-    margin: 5/@baseS*1rem;
+    margin: 12/@baseS*1rem;
 }
 .TitleBar{
     position: fixed;
@@ -113,10 +121,20 @@ export default {
     background-color: rgb(20,20,20);
     overflow: auto;
     font-size: 16px;
-    height: 90/@baseS*1rem;
+    height: 100/@baseS*1rem;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
   }
+.movieTagList{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  display: flex;
+  transition-property: transform;
+  box-sizing: content-box;
+  margin-left: 140/@baseS*1rem;
+}
 .movieTag{
     position: relative;
     width: 100%;
@@ -125,6 +143,7 @@ export default {
     display: flex;
     transition-property: transform;
     box-sizing: content-box;
+    overflow: hidden;
   }
   .subCate{
     text-align: center;
@@ -132,15 +151,18 @@ export default {
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
-    width: 16%;
+    width: 10%;
     height: 100%;
     position: relative;
     color:rgb(80,80,80);
-    padding-left: 60/@baseS*1rem;
+    font-size: 36/@baseS*1rem;
+    font-weight: 100;
+    padding-left: 30/@baseS*1rem;
+    padding-right: 30/@baseS*1rem;
   }
   .selected{
     color: rgb(18,150,219) !important;
-    font-weight: bold;
+    font-weight: 500;
   }
   .liveTitle{
     position: absolute;

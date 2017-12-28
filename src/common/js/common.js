@@ -21,7 +21,7 @@ var initWildDog = function(deviceid){
   console.log(config);
   wilddog.initializeApp(config);
   var ref = wilddog.sync().ref();
-  var hotelRef = ref.child('demo');
+  var hotelRef = ref.child(localStorage.getItem('projectName'));
   deviceActionRef = hotelRef.child('actionList').child(deviceid); 
   deviceInfoRef = hotelRef.child('deviceInfoList').child(deviceid);
   deviceMediaInfoRef = hotelRef.child('mediaInfoList').child(deviceid);
@@ -85,20 +85,45 @@ var getMoviePayParams = function(movie,action){
 }
 
 var isSending = false
+
 var sendRemoteControlEvent = function(data,action){
-  if(configs.remoteType == "WeiXin_proxy"){
-    console.log('sendWD')
-    sendWD(data,action);
+  console.log('sendRemoteControlEvent: ' + configs.remoteType)
+  if(configs.remoteType == "WeiXin"){
+    console.log('Old')
+    oldSend(data,action);
+  }else if(configs.remoteType == "WildDog"){
+    console.log('WildDog')
+    sendToWD(data,action)
   }else{
-    console.log('sendOpenvod')
-    sendJG(data,action);
+    console.log('New')
+    newSend(data,action);
   }
 }
 
-var sendJG = function(data,action){
+var sendToWD = function(data,action){
+  console.log('sendToWD')
+  let params = {
+    'deviceIP':localStorage.getItem('deviceIP'),
+    'mac':localStorage.getItem('mac'),
+    'deviceAlias':localStorage.getItem('deviceAlias'),
+    'packageName':'com.clearcrane.vod',
+    'projectName': localStorage.getItem('projectName'),
+    'actionType': action,
+    'actionContent':data,
+    'userID': localStorage.getItem('userid'),
+    'newAction':true,
+    'sendTime':(new Date()).getTime(),
+    'remoteType':configs.remoteType
+  }
+  console.log(params)
+  deviceActionRef.update(params)
+}
+
+var oldSend = function(data,action){
   if(isSending)
     return
   isSending = true
+  console.log('oldSend')
   let params = {
     'action': action,
     'project': localStorage.getItem('projectName'),
@@ -121,10 +146,14 @@ var sendJG = function(data,action){
   })
 }
 
-var sendWD = function(content,action){
+var newSend = function(content,action){
+  if(isSending)
+    return
+  isSending = true;
+  console.log('newSend')
   let params = {
     'deviceIP':localStorage.getItem('deviceIP'),
-    'regID':localStorage.getItem('regID'),
+    'mac':localStorage.getItem('mac'),
     'deviceAlias':localStorage.getItem('deviceAlias'),
     'packageName':'com.clearcrane.vod',
     'projectName': localStorage.getItem('projectName'),
@@ -132,16 +161,13 @@ var sendWD = function(content,action){
     'actionContent':content,
     'userID': localStorage.getItem('userid'),
     'newAction':true,
-    'sendTime':(new Date()).getTime()
+    'sendTime':(new Date()).getTime(),
+    'remoteType':configs.remoteType
   }
   console.log(params)
-  sendOpenvod(params)
-  deviceActionRef.update(params)
-}
-
-var sendOpenvod = function(params){
   uploadControllerAction(params).then(res => {
     console.log(res);
+    isSending = false
     if(res.rescode == 200 || res.rescode == '200'){
       
     }else{
@@ -150,7 +176,9 @@ var sendOpenvod = function(params){
   }).catch(error => {
     console.log(error);
     app.showErrorTip("网络错误")
+    isSending = false
   })
+  // deviceActionRef.update(params)
 }
 
 var WXPay = function(api){

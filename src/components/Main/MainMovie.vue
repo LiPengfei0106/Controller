@@ -2,10 +2,13 @@
   <div class="MovieList">
     <div class="mainContent">
       <div class="movieItem" v-for="movie in myMovieList" @click="playMovie(movie)">
-        <img v-lazy="movie['PicURL_ABS']" lazy="loaded" class="moviePoster"></img>
+        <div class="moviePoster">
+          <img v-lazy="movie['PicURL_ABS']" lazy="loaded"/>
+          <span class="movieScore">{{movie.Score}}</span>
+        </div>
         <div class="movieDetail">
           <span class="movieName">{{movie.Name['zh-CN']}}</span>
-          <span class="movieScore">{{movie.Score}}</span>
+          <span class="movieActor">{{movie.Actor['zh-CN']}}</span>
           <span class="movieIntro">{{movie.Introduce['zh-CN']}}</span>
         </div>
       </div>
@@ -92,7 +95,7 @@ export default {
     padding-top:  90/@baseS*1rem;
   }
   .movieItem{
-    height: 260/@baseS*1rem;
+    height: 262/@baseS*1rem;
     margin: 20/@baseS*1rem;
     padding: 12/@baseS*1rem;
     position: relative;
@@ -103,7 +106,11 @@ export default {
     overflow: hidden;
   }
   .moviePoster{
-    height:100%;
+    height:260/@baseS*1rem;
+    width: 180/@baseS*1rem;
+  }
+  .moviePoster img{
+    height:262/@baseS*1rem;
     width: 180/@baseS*1rem;
     border-radius: 10/@baseS*1rem;
     opacity: 0;
@@ -111,6 +118,17 @@ export default {
     -moz-transition: opacity 0.25s ease-in-out;
     -o-transition: opacity 0.25s ease-in-out;
     transition: opacity 0.25s ease-in-out;
+    position: absolute
+  }
+  .movieScore{
+    width: 160/@baseS*1rem;
+    padding-top: 10/@baseS*1rem;
+    text-align: right;
+    font-style:italic;
+    font-size: 24/@baseS*1rem;
+    color: rgb(255,150,0);
+    text-shadow: black 3/@baseS*1rem 3/@baseS*1rem 3/@baseS*1rem;
+    position: absolute
   }
   .movieDetail{
     position: absolute;
@@ -124,39 +142,48 @@ export default {
     opacity: 1;
   }
   .movieName{
-    margin-top: 20/@baseS*1rem;
+    margin-top: 15/@baseS*1rem;
+    padding-right: 10/@baseS*1rem;
     display: block;
     margin-left: 20/@baseS*1rem;
     line-height: 1.5;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 48/@baseS*1rem;
+    font-weight: 300;
+    font-size:40/@baseS*1rem;
+    color: rgb(205,215,225);
   }
-  .movieScore{
-    margin: 0;
-    line-height:1;
+  .movieActor{
+    padding-right: 20/@baseS*1rem;
+    line-height:2;
     display: block;
     margin-left: 20/@baseS*1rem;
     font-style:italic;
     margin:27rpx 0;
-    font-size: 40/@baseS*1rem;
-    color: rgb(255,150,0);
+    font-size: 24/@baseS*1rem;
+    font-weight: 200;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(180, 190, 200);
   }
   .movieIntro{
-    margin-top: 20/@baseS*1rem;
+    margin-top: 10/@baseS*1rem;
     margin-left: 20/@baseS*1rem;
+    padding-right: 20/@baseS*1rem;
     // text-indent: 20/@baseS*1rem;
     overflow-x: hidden;
-    // white-space: nowrap;
     line-height: 1.5;
     // text-overflow: ellipsis;
     display: block;
-    font-size: 36/@baseS*1rem;
+    font-size: 30/@baseS*1rem;
+    font-weight: 100;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     overflow: hidden;
+    color: rgb(205,215,225);
   }
 </style>
 

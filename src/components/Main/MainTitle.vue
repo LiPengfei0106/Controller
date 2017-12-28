@@ -105,7 +105,6 @@ export default {
     width: 150/@baseS*1rem;
     height: 100/@baseS*1rem;
     background-color: rgb(20,20,20);
-    position: fixed;
     z-index: 11;
   }
 .TVButton img{
@@ -133,7 +132,7 @@ export default {
   display: flex;
   transition-property: transform;
   box-sizing: content-box;
-  margin-left: 140/@baseS*1rem;
+  margin-left: 30/@baseS*1rem;
 }
 .movieTag{
     position: relative;
@@ -143,7 +142,6 @@ export default {
     display: flex;
     transition-property: transform;
     box-sizing: content-box;
-    overflow: hidden;
   }
   .subCate{
     text-align: center;

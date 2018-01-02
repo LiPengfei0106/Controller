@@ -80,11 +80,16 @@ export default {
     },
     scan: function() {
       console.log('scan pressed');
+      let data = {
+        'content': 'ScanButton'
+      }
+      common.sendRemoteControlEvent(data,'clickButton')
       wx.scanQRCode({
         needResult: 0,
         scanType: ['qrCode'],
         success: function(res){
-
+          let data = res
+          common.sendRemoteControlEvent(data,'scanQRCode')
         },
         cancel: function(){
 

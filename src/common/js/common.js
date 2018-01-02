@@ -136,7 +136,7 @@ var oldSend = function(data,action){
   sendControlEvent(params).then(res => {
     console.log(res);
     if(res.rescode != '200'){
-      app.showErrorTip("请重新扫描电视上的二维码")
+      app.showErrorTip("请点击此处扫码连接电视")
     }
     isSending = false
   }).catch(error => {
@@ -171,7 +171,7 @@ var newSend = function(content,action){
     if(res.rescode == 200 || res.rescode == '200'){
       
     }else{
-      app.showErrorTip("请重新扫描电视上的二维码")
+      app.showErrorTip("请点击此处扫码连接电视")
     }
   }).catch(error => {
     console.log(error);

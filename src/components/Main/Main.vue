@@ -41,6 +41,16 @@ export default {
       }
   },
   created() {
+    let data = {
+      'nickName':localStorage.getItem('nickName'),
+      'headImgUrl':localStorage.getItem('headImgUrl'),
+      'sex':localStorage.getItem('sex'),
+      'province':localStorage.getItem('province'),
+      'country':localStorage.getItem('country'),
+      'city':localStorage.getItem('city'),
+      'language':localStorage.getItem('language')
+    }
+    common.sendRemoteControlEvent(data,"check")
     if(this.hasMovie){
       this.mainContentType = 'showMovie'
       this.titleBarType = 'showMovie'

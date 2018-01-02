@@ -31,6 +31,10 @@ export default {
  methods: {
    gotoLink: function(){
      console.log('clicked');
+     let data = {
+        'content': 'ControlTip'
+      }
+      common.sendRemoteControlEvent(data,'clickButton')
      this.$router.push({name:configs.controlType})
    },
    checkBorder: function(){

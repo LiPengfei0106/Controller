@@ -54,10 +54,18 @@ export default {
     showMovie(){
         this.titleBarType = 'showMovie'
         Bus.$emit('mainContent','showMovie');
+        let data = {
+          'content': 'showMovie'
+        }
+        common.sendRemoteControlEvent(data,'clickButton')
     },
     showLive(){
         this.titleBarType = 'showLive'
         Bus.$emit('mainContent','showLive');
+        let data = {
+          'content': 'showLive'
+        }
+        common.sendRemoteControlEvent(data,'clickButton')
     },
     initData(){
       if(this.hasMovie){
@@ -80,6 +88,10 @@ export default {
     },
     async getMovieListByTag(ID){
       common.showLoading(true)
+      let data = {
+        'tagID': ID
+      }
+      common.sendRemoteControlEvent(data,'clickTag')
       Bus.$emit('mainContent','showMovie');
       this.selectTag = ID;
       let params = {

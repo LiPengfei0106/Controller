@@ -15,11 +15,16 @@ export default {
   methods:{
     gotoScan() {
       console.log('scan pressed');
+      let data = {
+        'content': errorTipInfo.errorContent
+      }
+      common.sendRemoteControlEvent(data,'clickScan')
       wx.scanQRCode({
         needResult: 0,
         scanType: ['qrCode'],
         success: function(res){
-
+          let data = res
+          common.sendRemoteControlEvent(data,'scanQRCode')
         },
         cancel: function(){
 

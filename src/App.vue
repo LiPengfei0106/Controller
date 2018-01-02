@@ -44,7 +44,7 @@ export default {
       errorTipInfo:{
         isShow:false,
         errorContent:'Error',
-        showTime:3
+        showTime:5
       },
       isShowLoading:false,
       mac:'00:00:00:00',
@@ -247,23 +247,31 @@ export default {
       checkWxSubs(params).then(res => {
         console.log(res);
         let isSubscribe = res['subscribe']
-        localStorage.setItem('isSubscribe', isSubscribe);
+        // localStorage.setItem('isSubscribe', isSubscribe);
         if(isSubscribe == 1) {
           // TODO
-          if(configs.remoteType == 'WeiXin'){
-            console.log("旧的遥控器界面");
-            if(configs.hasMovie)
-              this.$router.push({name:'MovieList'})
-            else if(configs.hasLive)
-              this.$router.push({name:'LiveList'})
-            else{
-              common.showLoading(false)
-              this.$router.push({name:configs.controlType})
-            }
-          }else{
-            console.log("默认新的遥控器界面");
-            this.$router.push({name:'Main'})
-          }
+          localStorage.setItem('nickName',res['nickname'])
+          localStorage.setItem('headImgUrl',res['headimgurl'])
+          localStorage.setItem('sex',res['sex'])
+          localStorage.setItem('province',res['province'])
+          localStorage.setItem('country',res['country'])
+          localStorage.setItem('city',res['city'])
+          localStorage.setItem('language',res['language'])
+          this.$router.push({name:'Main'})
+          // if(configs.remoteType == 'WeiXin'){
+          //   console.log("旧的遥控器界面");
+          //   if(configs.hasMovie)
+          //     this.$router.push({name:'MovieList'})
+          //   else if(configs.hasLive)
+          //     this.$router.push({name:'LiveList'})
+          //   else{
+          //     common.showLoading(false)
+          //     this.$router.push({name:configs.controlType})
+          //   }
+          // }else{
+          //   console.log("默认新的遥控器界面");
+          //   this.$router.push({name:'Main'})
+          // }
         }else{
           common.showRedirectUrl(this.projectName)
         }

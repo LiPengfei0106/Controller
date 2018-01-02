@@ -16,9 +16,9 @@ export default {
     gotoScan() {
       console.log('scan pressed');
       let data = {
-        'content': errorTipInfo.errorContent
+        'content': "ErrorTip"
       }
-      common.sendRemoteControlEvent(data,'clickScan')
+      common.sendRemoteControlEvent(data,'clickButton')
       wx.scanQRCode({
         needResult: 0,
         scanType: ['qrCode'],

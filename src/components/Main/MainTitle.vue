@@ -223,10 +223,11 @@ export default {
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
-    width: 12%;
+    width: 12vw;
     height: 40/@baseS*1rem;
     position: relative;
     color:rgb(80,80,80);
+    flex-wrap: nowrap;
     font-size: 36/@baseS*1rem;
     font-weight: 100;
     margin: 30/@baseS*1rem 22/@baseS*1rem;

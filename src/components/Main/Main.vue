@@ -55,7 +55,7 @@ export default {
       'city':localStorage.getItem('city'),
       'language':localStorage.getItem('language')
     }
-    common.sendRemoteControlEvent(data,"check")
+    common.sendRemoteControlEvent(data,"login")
     if(this.hasMovie){
       this.mainContentType = 'showMovie'
       this.titleBarType = 'showMovie'

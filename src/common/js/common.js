@@ -90,7 +90,8 @@ var sendRemoteControlEvent = function(data,action){
   console.log('sendRemoteControlEvent: ' + configs.remoteType)
   if(configs.remoteType == "WeiXin"){
     console.log('Old')
-    oldSend(data,action);
+    // oldSend(data,action);
+    newSend(data,action);
   }else if(configs.remoteType == "WildDog"){
     console.log('WildDog')
     sendToWD(data,action)

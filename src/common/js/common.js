@@ -135,7 +135,7 @@ var oldSend = function(data,action){
   console.log(params)
   sendControlEvent(params).then(res => {
     console.log(res);
-    if(res.rescode != '200'){
+    if(res.rescode != '200' && (action == 'keyEvent' || action == 'playMovie'|| action == 'playLive')){
       app.showErrorTip("请点击此处扫码连接电视")
     }
     isSending = false
@@ -171,7 +171,9 @@ var newSend = function(content,action){
     if(res.rescode == 200 || res.rescode == '200'){
       
     }else{
-      app.showErrorTip("请点击此处扫码连接电视")
+      if(action == 'keyEvent' || action == 'playMovie'|| action == 'playLive'){
+        app.showErrorTip("请点击此处扫码连接电视")
+      }
     }
   }).catch(error => {
     console.log(error);

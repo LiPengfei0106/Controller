@@ -47,18 +47,29 @@ export default {
         showTime:5
       },
       isShowLoading:false,
-      mac:'00:00:00:00',
-      deviceID:'deviceid',
-      projectName:'demo',
-      deviceAlias:'devicealias',
-      deviceIP:'192.168.17.217:40106',
-      time: '123123123123'
+      projectName:''
     }
   },
   beforeCreate: function() {
     common.initApp(this)
   },
+  beforeMount() {
+    console.log('beforeMount')
+  },
+  beforeUpdate() {
+    console.log('beforeUpdate')
+  },
+  updated() {
+    console.log('updated')
+    if(this.$route.path == '/'){
+      // window.opener=null;
+      // window.open('','_self');
+      // window.close();
+      this.init()
+    }
+  },
   mounted() {
+    console.log('mounted')
     this.init()
   },
   methods: {
@@ -76,43 +87,16 @@ export default {
         }
       }else{
         console.log('不用登录')
-        if(configs.remoteType == 'WeiXin_proxy'){
-          this.projectName = 'demo';
-          this.mac = 'mac';
-          this.deviceAlias = 'devicealias';
-          this.deviceIP = '192.168.17.204:40106';
-          localStorage.setItem('projectName', this.projectName);
-          localStorage.setItem('deviceAlias', this.deviceAlias);
-          localStorage.setItem('mac', this.mac);
-          localStorage.setItem('deviceIP', this.deviceIP);
-          this.$router.push({name:'Main'});
-          return;
-        }else if(configs.remoteType == 'WildDog'){
-          this.projectName = 'demo';
-          this.mac = 'mac';
-          this.deviceAlias = 'devicealias';
-          this.deviceIP = '192.168.17.204:40106';
-          common.initWildDog('test')
-          localStorage.setItem('projectName', this.projectName);
-          localStorage.setItem('deviceAlias', this.deviceAlias);
-          localStorage.setItem('mac', this.mac);
-          localStorage.setItem('deviceIP', this.deviceIP);
-          this.$router.push({name:'Main'});
-          return;
-        // }else if(configs.remoteType == 'WeiXin'){
+        this.projectName = 'demo';
+        if(configs.remoteType == 'WildDog'){
+            common.initWildDog('testDevice')
         }else{
-          if(!urlParams.deviceid)
-            urlParams.deviceid = 'demo$888$123456789'
-          if(!urlParams.projectid)
-            urlParams.projectid = 'demo'
-          localStorage.setItem('deviceid', urlParams.deviceid);
-          localStorage.setItem('projectid', urlParams.projectid);
-          if(configs.hasMovie)
-            this.$router.push({name:'MovieList'})
-          else if(configs.hasLive)
-            this.$router.push({name:'LiveList'})
-          else
-            this.$router.push({name:'ButtonControl'})
+          localStorage.setItem('projectName', this.projectName);
+          localStorage.setItem('deviceAlias', 'unknow');
+          localStorage.setItem('mac', 'unknow');
+          localStorage.setItem('deviceIP','unknow');
+          localStorage.setItem('devicePlatform', 'unknow');
+          this.$router.push({name:'Main'});
         }
       }
     },
@@ -146,43 +130,41 @@ export default {
       if(state == 'gettvdeviceid'){
         console.log('读取缓存')
         this.projectName = localStorage.getItem('projectName');
-        this.mac = localStorage.getItem('mac');
-        this.deviceAlias = localStorage.getItem('deviceAlias');
-        this.deviceIP = localStorage.getItem('deviceIP');
         if(!this.projectName){
           console.log('没有缓存')
           this.projectName = 'demo'
           localStorage.setItem('projectName', this.projectName);
-          localStorage.setItem('mac', 'None');
-          localStorage.setItem('deviceAlias', 'None');
-          localStorage.setItem('deviceIP', 'None');
+          localStorage.setItem('mac', 'unknow');
+          localStorage.setItem('deviceAlias', 'unknow');
+          localStorage.setItem('devicePlatform', 'unknow');
+          localStorage.setItem('deviceIP', 'unknow');
         }
       }else if((state.split('$')).length > 2){
         console.log('老的极光的参数')
-        this.deviceAlias = state.split(';')[0]
-        this.projectName = this.deviceAlias.split('$')[0]
-        this.mac = 'unknow';
-        this.deviceIP = '0.0.0.0';
+        let deviceAlias = state.split(';')[0]
+        this.projectName = deviceAlias.split('$')[0]
 
         localStorage.setItem('projectName', this.projectName);
-        localStorage.setItem('deviceAlias', this.deviceAlias);
-        localStorage.setItem('mac', this.mac);
-        localStorage.setItem('deviceIP', this.deviceIP);
+        localStorage.setItem('deviceAlias', deviceAlias);
+        localStorage.setItem('mac', 'unknow');
+        localStorage.setItem('devicePlatform', 'unknow');
+        localStorage.setItem('deviceIP', 'unknow');
       }else{
         let decodedData = window.atob(state).split(';');
         if(decodedData.length > 3){
           console.log('新的参数')
           console.log(decodedData);
-          this.deviceAlias = state
+          let deviceAlias = state
           this.projectName = decodedData[0];
-          this.mac = decodedData[1];
-          this.deviceIP = decodedData[2];
-          this.time = decodedData[3];
+          let mac = decodedData[1];
+          let deviceIP = decodedData[2];
+          let devicePlatform = decodedData[3];
 
           localStorage.setItem('projectName', this.projectName);
-          localStorage.setItem('mac', this.mac);
-          localStorage.setItem('deviceAlias', this.deviceAlias);
-          localStorage.setItem('deviceIP', this.deviceIP);
+          localStorage.setItem('mac', mac);
+          localStorage.setItem('deviceAlias', deviceAlias);
+          localStorage.setItem('devicePlatform', devicePlatform);
+          localStorage.setItem('deviceIP', deviceIP);
         }else{
           console.log('不知道的参数')
           common.showRedirectUrl()
@@ -206,14 +188,13 @@ export default {
         if(configs.remoteType == 'WeiXin_proxy'){
 
         }else if(configs.remoteType == 'WildDog'){
-          common.initWildDog(this.mac)
+          common.initWildDog(localStorage.getItem('mac'))
         }
         if(sessionStorage.getItem('clear_session')){
           this.checkSubscribe()
         }else{
           this.getClearSession(appid,code)
         }
-        // this.$router.push({name:'Login',params: {appid:appid,code:code,state:state}})
       })
     },
     getClearSession(appid,code){

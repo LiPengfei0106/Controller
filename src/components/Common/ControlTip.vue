@@ -8,6 +8,7 @@
 <script>
 
 import {configs} from '@/data/staticData.js'
+import common from '@/common/js/common.js'
 
 export default {
  name: 'ControlTip',
@@ -35,7 +36,7 @@ export default {
         'content': 'ControlTip'
       }
       common.sendRemoteControlEvent(data,'clickButton')
-     this.$router.push({name:configs.controlType})
+      this.$router.push({name:configs.controlType})
    },
    checkBorder: function(){
      let imgWidth = document.querySelector('.remoteImg').width;

@@ -18,6 +18,7 @@
 import common from '@/common/js/common.js'
 import {getResources} from '@/api/service.js'
 import {configs,data} from '@/data/staticData.js'
+import Bus from '@/common/js/bus.js'
 
 export default {
   name: 'LiveList',
@@ -32,15 +33,17 @@ export default {
     // document.querySelector('body').scrollTop = localStorage.getItem('livePosition');
     // document.getElementById('controltip').style.left = "0px";
     // document.getElementById('controltip').style.top = "0px";
+    this.getLiveLists();
   },
   mounted() {
-    this.getLiveLists();
+    
   },
   deactivated() {
     localStorage.setItem('livePosition',document.querySelector('body').scrollTop);
   },
   methods: {
     getLiveLists () {
+      console.log("getLiveLists")
       common.showLoading(true)
       let params = {
         'action': 'getLiveList',
@@ -49,6 +52,7 @@ export default {
       getResources(params).then(res => {
         common.showLoading(false)
         this.liveList = res.data;
+        Bus.$emit('liveList', res.data);
       })
     },
     playLive (index) {
@@ -79,14 +83,14 @@ export default {
     width: 100%;
     z-index: 1;
     user-select: none;
-    padding-top:  90/@baseS*1rem;
+    padding-top:  170/@baseS*1rem;
   }
   .channelBox{
     border-radius:9px;
     margin:30/@baseS*1rem;
     height: 140/@baseS*1rem;
     color:rgb(245,245,245);
-    background-color: rgba(255,255,255,.1)
+    background-color: rgba(255,255,255,.05)
   }
   .channelContent{
     height: 100%;

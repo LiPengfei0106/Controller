@@ -5,6 +5,8 @@
 </template>
 <script>
 
+import common from '@/common/js/common.js'
+
 export default {
   name: 'ErrorTip',
   props: ['errorTipInfo'],

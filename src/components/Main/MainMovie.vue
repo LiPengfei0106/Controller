@@ -92,7 +92,7 @@ export default {
     width: 100%;
     overflow: auto;
     position: absolute;
-    padding-top:  90/@baseS*1rem;
+    padding-top:  170/@baseS*1rem;
   }
   .movieItem{
     height: 262/@baseS*1rem;

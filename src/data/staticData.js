@@ -10,7 +10,8 @@ const keyCodes = {
   Home: 135,
   Menu: 82,
   Mute: 164,
-  TV: 170
+  TV: 170,
+  Power: 26
 }
 
 const configs = {

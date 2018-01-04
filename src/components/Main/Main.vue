@@ -4,6 +4,7 @@
     <MainMovie v-show="mainContentType == 'showMovie'"></MainMovie>
     <MainLive v-show="mainContentType == 'showLive'"></MainLive>
     <ControlTip></ControlTip>
+    <!-- <yd-backtop></yd-backtop> -->
     <!-- <PlayBar></PlayBar> -->
   </div>
 </template>
@@ -20,6 +21,7 @@ import MainLive from '@/components/Main/MainLive.vue'
 import MainTitle from '@/components/Main/MainTitle.vue'
 import {configs} from '@/data/staticData.js'
 import PlayBar from '@/components/Common/PlayBar.vue'
+import Search from '@/components/Common/Search.vue'
 
 
 export default {
@@ -29,7 +31,8 @@ export default {
     MainLive,
     MainMovie,
     MainTitle,
-    PlayBar
+    PlayBar,
+    Search
   },
   data() {
       return{
@@ -37,7 +40,9 @@ export default {
         movieInfo:{},
         hasLive:configs.hasLive,
         hasMovie:configs.hasMovie,
-        mainContentType:''
+        mainContentType:'',
+        value2: '',
+        result: []
       }
   },
   created() {

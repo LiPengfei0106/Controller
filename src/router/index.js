@@ -11,6 +11,7 @@ import Main from '@/components/Main/Main'
 import MainLive from '@/components/Main/MainLive'
 import MainMovie from '@/components/Main/MainMovie'
 import MainTitle from '@/components/Main/MainTitle'
+import Search from '@/components/common/Search'
 // import Index from '@/components/Index'
 
 
@@ -26,7 +27,8 @@ var routes = [
   {name:"NoMenuAndRoomControl",path: "/NoMenuAndRoomControl", component: NoMenuAndRoomControl, meta: { title: '遥控器'}},
   {name:"MovieList",path: "/MovieList", component: MovieList, meta: { title: '电影列表'}},
   {name:"MovieDetail",path: "/MovieDetail", component: MovieDetail, meta: { title: '电影详情'}},
-  {name:"LiveList",path: "/LiveList", component:LiveList, meta: { title: '直播列表'}}
+  {name:"LiveList",path: "/LiveList", component:LiveList, meta: { title: '直播列表'}},
+  {name:"Search",path: "/Search", component:Search, meta: { title: '搜索'}}
 ]
 
 export default new Router({

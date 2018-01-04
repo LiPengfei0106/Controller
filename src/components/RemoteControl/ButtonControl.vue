@@ -7,8 +7,11 @@
       <span class="scan">
         <img src="../../assets/images/扫一扫.png" @click="scan()">
       </span>
-      <span class="tv">
+      <span class="tv" v-show="!canPowerOff">
         <img src="../../assets/images/直播.png"  @click="btnPressedUp(keyCode.TV)">
+      </span>
+      <span class="tv" v-show="canPowerOff">
+        <img src="../../assets/images/power-off.png"  @click="powerOff()">
       </span>
     </div>
     <div class="volControl">
@@ -60,6 +63,8 @@ export default {
       return{
         key:-1,
         keyCode: keyCodes,
+        canPowerOff: localStorage.getItem('devicePlatform') == 'philips_5358'
+          || localStorage.getItem('devicePlatform') == 'S905'
       }
   },
   created: function () {
@@ -73,7 +78,22 @@ export default {
   },
   methods: {
     back() {
+      let data = {
+        'content': 'BackButton'
+      }
+      common.sendRemoteControlEvent(data,'clickButton')
       window.history.go(-1)
+    },
+    powerOff: function() {
+      let me = this;
+      this.$dialog.confirm({
+                    title: '确定关机？',
+                    mes: '关机后将断开与电视的连接',
+                    opts: () => {
+                        // this.$dialog.toast({mes: '你点了确定', timeout: 1000});
+                        me.btnPressedUp(this.keyCode.Power)
+                    }
+                });
     },
     scan: function() {
       console.log('scan pressed');

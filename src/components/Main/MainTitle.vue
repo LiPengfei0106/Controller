@@ -1,6 +1,7 @@
 <template>
+<div>
     <div class="TitleBar">
-        <div class="movieTag" v-show="titleBarType=='showMovie'">
+        <div class="titleTag" v-show="titleBarType=='showMovie'">
             <div class="TVButton"  v-show="hasLive">
                 <img src="../../assets/images/tv_pressed.png" @click="showLive()">
             </div>
@@ -10,16 +11,34 @@
               </div>
             </div>
         </div>
-        <div class="liveTag" v-show="titleBarType=='showLive'">
+        <div class="titleTag" v-show="titleBarType=='showLive'">
             <div class="TVButton" v-show="hasMovie">
                 <img src="../../assets/images/movie_pressed.png" @click="showMovie()">
             </div>
             <div class="liveTitle">
                 电视直播
             </div>
-            
+        </div>
+        <div class="searchBar" v-on:click="search()">
+          <div>搜索</div>
         </div>
     </div>
+    <!-- <transition name="fade">
+      <div v-if="show" class="searchPage">
+        <form class="searchForm" @submit="search($event)">
+        <div>
+          <div class="searchBox">
+            <div class="searchBoxInner">
+              <input type="search" v-model="content" class="inputText" name="keyWord" id="keyword" placeholder="输入片名、主演或导演">
+            </div>
+          </div>
+          <a class="searchCancel" v-on:click="show = !show;stopBodyScroll(false)">取消</a>
+        </div>
+        </form>
+        <SearchResult></SearchResult>
+      </div>
+    </transition> -->
+  </div>
 </template>
 
 <script>
@@ -32,25 +51,48 @@ export default {
   name: 'MainTitle',
   data() {
       return{
+        show: false,
         selectTag: 0,
         categoryList: [],
         hasLive:configs.hasLive,
         hasMovie:configs.hasMovie,
-        titleBarType:''
+        titleBarType:'',
+        content:''
       }
   },
   created() {
-      if(this.hasMovie){
+      // if(this.hasMovie){
+      //   this.titleBarType = 'showMovie'
+      //   this.getMovieTag()
+      // }else{
+      //   this.titleBarType = 'showLive'
+      // }
+  },
+  mounted() {
+    if(this.hasMovie){
         this.titleBarType = 'showMovie'
         this.getMovieTag()
       }else{
         this.titleBarType = 'showLive'
       }
   },
-//   mounted() {
-//     this.initData();
-//   },
   methods: {
+    search(){
+      console.log('clicked');
+      let data = {
+        'content': 'Search'
+      }
+      common.sendRemoteControlEvent(data,'clickButton')
+      this.$router.push({name:'Search'})
+    },
+    stopBodyScroll (isFixed) {
+      let bodyEl = document.body
+      if (isFixed) {
+        bodyEl.style.position = 'fixed'
+      } else {
+        bodyEl.style.position = ''
+      }
+    },  
     showMovie(){
         this.titleBarType = 'showMovie'
         Bus.$emit('mainContent','showMovie');
@@ -112,6 +154,26 @@ export default {
 
 <style lang="less" scoped>
 @baseS: 75;
+.searchBar{
+  position: fixed;
+  z-index: 10;
+  height: 88/@baseS*1rem;
+  width: 100%;
+  background: rgb(21,25,15)
+}
+.searchBar div{
+  text-align:center;
+  font-size: 30/@baseS*1rem;
+  color: #666;
+  border:1px solid #333;
+  height: 40/@baseS*1rem;
+  padding:8/@baseS*1rem;
+  margin:12/@baseS*1rem 24/@baseS*1rem;
+  background: rgb(30,30,30);
+  width:90%;
+  border-radius:40/@baseS*1rem;
+  -moz-border-radius:40/@baseS*1rem; /* 老的 Firefox */
+}
 .TVButton{
     display: inline-block;
     width: 150/@baseS*1rem;
@@ -132,24 +194,24 @@ export default {
     background-color: rgb(20,20,20);
     overflow: auto;
     font-size: 16px;
-    height: 100/@baseS*1rem;
+    height: 188/@baseS*1rem;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
   }
 .movieTagList{
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 100/@baseS*1rem;
   z-index: 10;
   display: flex;
   transition-property: transform;
   box-sizing: content-box;
   margin-left: 30/@baseS*1rem;
 }
-.movieTag{
+  .titleTag{
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 100/@baseS*1rem;
     z-index: 10;
     display: flex;
     transition-property: transform;
@@ -161,14 +223,13 @@ export default {
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
-    width: 10%;
-    height: 100%;
+    width: 12%;
+    height: 40/@baseS*1rem;
     position: relative;
     color:rgb(80,80,80);
     font-size: 36/@baseS*1rem;
     font-weight: 100;
-    padding-left: 30/@baseS*1rem;
-    padding-right: 30/@baseS*1rem;
+    margin: 30/@baseS*1rem 22/@baseS*1rem;
   }
   .selected{
     color: rgb(18,150,219) !important;
@@ -180,10 +241,10 @@ export default {
     left:60px;
     right: 60px;
     bottom: 0;
-    color: #ffffff;
-    font-size: 20px;
+    color: #ddd;
+    font-size: 42/@baseS*1rem;
     text-align: center;
-    height: 90/@baseS*1rem;
+    height: 80/@baseS*1rem;
     line-height: 90/@baseS*1rem;
   }
 

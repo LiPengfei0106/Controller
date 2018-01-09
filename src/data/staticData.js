@@ -15,6 +15,7 @@ const keyCodes = {
 }
 
 const configs = {
+  wxDebug : true,
   needLogin : true,
   hasMovie : true,
   hasLive : true,
@@ -22,6 +23,7 @@ const configs = {
   controlType: 'ButtonControl',
   // remoteType: 'WildDog',
   remoteType: 'WeiXin_proxy',
+  controlSender: 'new',
   movieDiscount:50
 }
 export {keyCodes,configs}

@@ -52,6 +52,11 @@ export default {
   },
   beforeCreate: function() {
     common.initApp(this)
+    // 禁掉长按事件
+    document.oncontextmenu=function(e){
+      //或者return false;
+      e.preventDefault();
+    };
   },
   beforeMount() {
     console.log('beforeMount')
@@ -130,6 +135,7 @@ export default {
       if(state == 'gettvdeviceid'){
         console.log('读取缓存')
         this.projectName = localStorage.getItem('projectName');
+        configs.controlSender = localStorage.getItem('controlSender');
         if(!this.projectName){
           console.log('没有缓存')
           this.projectName = 'demo'
@@ -144,6 +150,8 @@ export default {
         let deviceAlias = state.split(';')[0]
         this.projectName = deviceAlias.split('$')[0]
 
+        configs.controlSender = 'old';
+        localStorage.setItem('controlSender', 'old');
         localStorage.setItem('projectName', this.projectName);
         localStorage.setItem('deviceAlias', deviceAlias);
         localStorage.setItem('mac', 'unknow');
@@ -159,7 +167,8 @@ export default {
           let mac = decodedData[1];
           let deviceIP = decodedData[2];
           let devicePlatform = decodedData[3];
-
+          configs.controlSender = 'new';
+          localStorage.setItem('controlSender', 'new');
           localStorage.setItem('projectName', this.projectName);
           localStorage.setItem('mac', mac);
           localStorage.setItem('deviceAlias', deviceAlias);
@@ -268,7 +277,7 @@ export default {
       };
       getWXSign(data).then(res => {
         wx.config({
-          debug: false,
+          debug: configs.wxDebug,
           appId: data.appid,
           timestamp: res.timestamp,
           nonceStr: res.noncestr,

@@ -59,8 +59,24 @@ import Bus from '@/common/js/bus.js'
         },
         methods: {
             startRecord(){
+                if(this.recording){
+                    return;
+                }
                 console.log('startRecord');
-                wx.startRecord();
+                wx.startRecord({
+                    success: function(){
+                        // localStorage.rainAllowRecord = 'true';
+                        // wx.stopRecord();
+                        this.$dialog.toast({mes: "请说话", timeout: 2000});
+                    },
+                    cancel: function () {
+                        this.$dialog.toast({mes: "您拒绝授权录音", timeout: 2000});
+                    },
+                    fail: function(res) {
+                        //录音失败
+                        this.$dialog.toast({mes: res, timeout: 2000});
+                    }
+                });
                 this.recording=true
                 // this.$dialog.notify({
                 //     mes: '正在聆听...',
@@ -74,6 +90,10 @@ import Bus from '@/common/js/bus.js'
                 wx.stopRecord({
                     success: function (res) {
                         me.translateVoice(res.localId);
+                    },
+                    fail: function(res) {
+                        //录音失败
+                        this.$dialog.toast({mes: res, timeout: 2000});
                     }
                 });
             },

@@ -15,7 +15,8 @@ const keyCodes = {
 }
 
 const configs = {
-  wxDebug : true,
+  wxDebug : false,
+  appid: 'wx811bcf31fe706795',
   needLogin : true,
   hasMovie : true,
   hasLive : true,

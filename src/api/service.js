@@ -15,24 +15,8 @@ export const sendControlEvent= (params) => {
   return axios.post('/backend_wx/v1/remote_control', params).then(res => res.data)
 }
 
-export const getWxParams = (params) => {
-  return axios.post('/backend_wx/v1/buildsession', params).then(res => res.data)
-}
-
-export const checkWxSubs = (params) => {
-  return axios.post('/backend_wx/v1/wxusersubscheck', params).then(res => res.data)
-}
-
-export const bindTVDevice = (params) => {
-  return axios.post('/backend_wx/v1/bindtvdevice', params).then(res => res.data)
-}
-
-export const getTVDeviceId = (params) => {
-  return axios.post('/backend_wx/v1/gettvdeviceid', params).then(res => res.data)
-}
-
 export const getWXSign = (params) => {
-  return axios.post('/backend_wx/v1/jssdksign', params).then(res => res.data)
+  return axios.post('/rc/weixinauth', params).then(res => res.data)
 }
 
 export const getRemoteSubscribeURL = (params) => {
@@ -45,5 +29,9 @@ export const remotePay = (params) => {
 
 export const uploadControllerAction = (params) => {
   return axios.post('/rc/controlleraction', params).then(res => res.data)
+}
+
+export const logon = (params) => {
+  return axios.post('/rc/logon', params).then(res => res.data)
 }
 

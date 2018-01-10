@@ -31,8 +31,7 @@ var urlParams
 import common from './common/js/common.js'
 import ErrorTip from '@/components/Common/ErrorTip.vue'
 import {configs} from '@/data/staticData.js'
-import {getWxParams, checkWxSubs,getRemoteSubscribeURL, getWXSign,getResources} from '@/api/service.js'
-
+import {getWXSign,getResources,logon} from '@/api/service.js'
 
 export default {
   name: 'app',
@@ -81,11 +80,11 @@ export default {
     init() {
       console.log('APP init')
       console.log(urlParams)
-      localStorage.setItem('appid', urlParams.appid)
       if(configs.needLogin){
         console.log('needLogin')
-        if(urlParams.appid && urlParams.code && urlParams.state){
-          this.checkProject(urlParams.appid,urlParams.code,urlParams.state)
+        if(urlParams.code && urlParams.state){
+        // if(urlParams.appid && urlParams.code && urlParams.state){
+          this.checkProject(urlParams.code,urlParams.state)
         }else{
           console.log('没有登录所需要的Params')
           common.showRedirectUrl()
@@ -126,12 +125,10 @@ export default {
     showLoading(isShow){
       this.isShowLoading = isShow
     },
-    checkProject(appid,code,state){
+    checkProject(code,state){
       console.log('checkProject');
-      console.log('appid:'+appid);
       console.log('code:'+code);
       console.log('state:'+state);
-      localStorage.setItem('appid', appid);
       if(state == 'gettvdeviceid'){
         console.log('读取缓存')
         this.projectName = localStorage.getItem('projectName');
@@ -199,81 +196,49 @@ export default {
         }else if(configs.remoteType == 'WildDog'){
           common.initWildDog(localStorage.getItem('mac'))
         }
-        if(sessionStorage.getItem('clear_session')){
-          this.checkSubscribe()
-        }else{
-          this.getClearSession(appid,code)
-        }
-      })
-    },
-    getClearSession(appid,code){
-      console.log('getClearSession');
-      let params = {
-        'appid': appid,
-        'code': code
-      }
-      getWxParams(params).then(res => {
-        console.log(res);
-        if(!res['clear_session']){
-          common.showRedirectUrl(this.projectName)
-          return;
-        }
-        localStorage.setItem('userid', res.userid);
-        localStorage.setItem('openid', res.openid);
-        sessionStorage.setItem('clear_session', res['clear_session']);
-        this.checkSubscribe()
-        this.getWxSignature();
+        this.logon(code)
       }).catch ( error => {
         console.log(error)
         common.showRedirectUrl(this.projectName)
       })
     },
-    checkSubscribe(){
-      console.log('checkSubscribe');
-      var params = {
-        'clear_session': sessionStorage.getItem('clear_session'),
-        'lang': 'zh_CN'
+    logon(code){
+      console.log('logon');
+      let params = {
+        "Type":"WeiXin",
+        "action":"logon",
+        'projectName': this.projectName,
+        "CODE":code
       }
-      checkWxSubs(params).then(res => {
+      logon(params).then(res => {
         console.log(res);
-        let isSubscribe = res['subscribe']
-        // localStorage.setItem('isSubscribe', isSubscribe);
-        if(isSubscribe == 1) {
-          // TODO
-          localStorage.setItem('nickName',res['nickname'])
-          localStorage.setItem('headImgUrl',res['headimgurl'])
-          localStorage.setItem('sex',res['sex'])
-          localStorage.setItem('province',res['province'])
-          localStorage.setItem('country',res['country'])
-          localStorage.setItem('city',res['city'])
-          localStorage.setItem('language',res['language'])
+        if(res.subscribe == 1){
+          this.getWxSignature();
+          localStorage.setItem('userid', res.userID);
+          localStorage.setItem('openid', res.openid);
+          localStorage.setItem('nickName',res.user_info['nickname'])
+          localStorage.setItem('headImgUrl',res.user_info['headimgurl'])
+          localStorage.setItem('sex',res.user_info['sex'])
+          localStorage.setItem('province',res.user_info['province'])
+          localStorage.setItem('country',res.user_info['country'])
+          localStorage.setItem('city',res.user_info['city'])
+          localStorage.setItem('language',res.user_info['language'])
           this.$router.push({name:'Main'})
-          // if(configs.remoteType == 'WeiXin'){
-          //   console.log("旧的遥控器界面");
-          //   if(configs.hasMovie)
-          //     this.$router.push({name:'MovieList'})
-          //   else if(configs.hasLive)
-          //     this.$router.push({name:'LiveList'})
-          //   else{
-          //     common.showLoading(false)
-          //     this.$router.push({name:configs.controlType})
-          //   }
-          // }else{
-          //   console.log("默认新的遥控器界面");
-          //   this.$router.push({name:'Main'})
-          // }
         }else{
           common.showRedirectUrl(this.projectName)
         }
+      }).catch ( error => {
+        console.log(error)
+        common.showRedirectUrl(this.projectName)
       })
-      
     },
     getWxSignature () {
       console.log('getWxSignature');
       let data = {
-        appid: localStorage.getItem('appid'),
-        clear_session: sessionStorage.getItem('clear_session'),
-        url: window.location.href.split('#')[0]
+        "action":"getJSSDK",
+        'appid': configs.appid,
+        // 'clear_session': sessionStorage.getItem('clear_session'),
+        'url': window.location.href.split('#')[0]
       };
       getWXSign(data).then(res => {
         wx.config({

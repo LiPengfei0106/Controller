@@ -8,8 +8,8 @@
         <img src="../../assets/images/扫一扫.png" @click="scan()">
       </span>
       <span class="tv">
-        <a href="http://mts.xiezhuwang.com/HotelMaster/FirstLook?Path=home&AppID=wxc4118297da3a9a0a">
-        <!-- <a href="http://mts.xiezhuwang.com/HotelMaster/FirstLook?Path=home&AppID=wxb8aac5c60f0aab5b"> -->
+        <!-- <a href="http://mts.xiezhuwang.com/HotelMaster/FirstLook?Path=home&AppID=wxc4118297da3a9a0a"> -->
+        <a href="http://mts.xiezhuwang.com/HotelMaster/FirstLook?Path=home&AppID=wxb8aac5c60f0aab5b">
           <img src="../../assets/images/客控.png">
         </a>
       </span>

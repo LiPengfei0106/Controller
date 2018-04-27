@@ -44,6 +44,8 @@ var setDocumentTitle = function(title) {
 }
 
 var showRedirectUrl = function(projectName){
+  if(!configs.needSubscribe)
+    return
   var urlImg = document.getElementById("urlImg");
   if(!projectName){
     showLoading(false)

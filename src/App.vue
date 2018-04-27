@@ -46,7 +46,8 @@ export default {
         showTime:5
       },
       isShowLoading:false,
-      projectName:''
+      projectName:'',
+      subscribe:0
     }
   },
   beforeCreate: function() {
@@ -69,7 +70,11 @@ export default {
       // window.opener=null;
       // window.open('','_self');
       // window.close();
-      this.init()
+      if(this.subscribe == 1){
+        this.$router.push({name:'Main'})
+      }else{
+        this.init()
+      }
     }
   },
   mounted() {
@@ -144,6 +149,7 @@ export default {
         }
       }else if((state.split('$')).length > 2){
         console.log('老的极光的参数')
+        console.log(state)
         let deviceAlias = state.split(';')[0]
         this.projectName = deviceAlias.split('$')[0]
 
@@ -151,6 +157,8 @@ export default {
         localStorage.setItem('controlSender', 'old');
         localStorage.setItem('projectName', this.projectName);
         localStorage.setItem('deviceAlias', deviceAlias);
+        // TODO 新的参数里面好像没有RoomNO，这个客控要用
+        localStorage.setItem('roomNo', deviceAlias.split('$')[1]);
         localStorage.setItem('mac', 'unknow');
         localStorage.setItem('devicePlatform', 'unknow');
         localStorage.setItem('deviceIP', 'unknow');
@@ -212,7 +220,11 @@ export default {
       }
       logon(params).then(res => {
         console.log(res);
-        if(res.subscribe == 1){
+        this.subscribe = res.subscribe
+        if(!configs.needSubscribe){
+          this.subscribe = 1
+        }
+        if(this.subscribe == 1){
           this.getWxSignature();
           localStorage.setItem('userid', res.userID);
           localStorage.setItem('openid', res.openid);

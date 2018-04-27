@@ -8,10 +8,13 @@
         <img src="../../assets/images/扫一扫.png" @click="scan()">
       </span>
       <span class="tv">
-        <a href="http://mts.xiezhuwang.com/HotelMaster/FirstLook?Path=home&AppID=wxc4118297da3a9a0a">
-        <!-- <a href="http://mts.xiezhuwang.com/HotelMaster/FirstLook?Path=home&AppID=wxb8aac5c60f0aab5b"> -->
+        <!-- <a href="http://mts.xiezhuwang.com/HotelMaster/FirstLook?Path=home&AppID=wxc4118297da3a9a0a"> -->
+        
+        <!-- <a href="http://mts.xiezhuwang.com/HotelMaster/FirstLook?Path=home&AppID=wxb8aac5c60f0aab5b">
           <img src="../../assets/images/客控.png">
-        </a>
+        </a> -->
+
+        <img src="../../assets/images/客控.png" @click="kekong()">
       </span>
     </div>
     <div class="volControl">
@@ -56,6 +59,7 @@
 
 import common from '@/common/js/common.js'
 import {keyCodes} from '../../data/staticData.js'
+import axios from 'axios'
 
 export default {
   name: 'NoMenuAndRoomControl',
@@ -77,6 +81,23 @@ export default {
   methods: {
     back() {
       window.history.go(-1)
+    },
+    kekong:function() {
+      let params = {
+        "roomNo":localStorage.getItem('roomNo'),
+        "projectName":localStorage.getItem('projectName')
+      }
+      axios.get('http://iotd.cleartv.cn/iotd_backend/getRoomToken?roomNo='+params.roomNo+'&projectName='+params.projectName)
+                  .then(function (response) {
+                    console.log(response);
+                    let token = response.data.wxAuthToken
+                    // alert(response.data.wxAuthToken)
+                    window.location.href = 'http://iotd.cleartv.cn/kekong/#/?roomNo='+params.roomNo+'&projectName='+params.projectName+'&token=' + token
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
+      
     },
     scan: function() {
       console.log('scan pressed');
